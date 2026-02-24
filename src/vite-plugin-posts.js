@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import MarkdownIt from "markdown-it";
 import Shiki from "@shikijs/markdown-it";
 import { postTemplate } from "./post-template.js";
+import { postsArchiveTemplate } from "./posts-archive-template.js";
 
 const VIRTUAL_MODULE_ID = "virtual:posts-meta";
 const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID;
@@ -92,6 +93,21 @@ export default function postsPlugin() {
 
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
+        // Archive listing: /posts/ or /posts
+        if (req.url === "/posts/" || req.url === "/posts") {
+          const posts = await loadPosts(server.config.root);
+          const meta = posts.map(({ bodyHtml, ...rest }) => rest);
+          const html = postsArchiveTemplate({
+            posts: meta,
+            cssPath: "/src/style.css",
+          });
+          const transformed = await server.transformIndexHtml("/posts/", html);
+          res.setHeader("Content-Type", "text/html");
+          res.end(transformed);
+          return;
+        }
+
+        // Individual post: /posts/<slug>/
         const match = req.url?.match(/^\/posts\/([a-z0-9-]+)\/?$/);
         if (!match) return next();
 
@@ -109,7 +125,6 @@ export default function postsPlugin() {
           cssPath: "/src/style.css",
         });
 
-        // Transform through Vite's HTML pipeline so Tailwind/HMR work
         const transformed = await server.transformIndexHtml(
           `/posts/${slug}/`,
           html,
