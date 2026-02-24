@@ -104,6 +104,13 @@ function renderPosts() {
     </a>`;
     })
     .join("");
+
+  if (posts.length > 3) {
+    grid.insertAdjacentHTML(
+      "afterend",
+      '<a href="/posts/" class="inline-block mt-6 font-mono text-sm text-accent hover:underline">view all posts &rarr;</a>',
+    );
+  }
 }
 
 renderSkills();
