@@ -181,6 +181,18 @@ export default function postsPlugin() {
           source: html,
         });
       }
+
+      // Emit archive listing page
+      const archiveMeta = posts.map(({ bodyHtml, ...rest }) => rest);
+      const archiveHtml = postsArchiveTemplate({
+        posts: archiveMeta,
+        cssPath: builtCssPath,
+      });
+      this.emitFile({
+        type: "asset",
+        fileName: "posts/index.html",
+        source: archiveHtml,
+      });
     },
   };
 }
