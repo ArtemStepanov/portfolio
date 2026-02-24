@@ -12,7 +12,11 @@
     "vite": "^7.3.1"
   },
   "dependencies": {
+    "@shikijs/markdown-it": "^3.22.0",
     "@tailwindcss/vite": "^4.2.1",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.1",
+    "shiki": "^3.22.0",
     "tailwindcss": "^4.2.1"
   }
 }
