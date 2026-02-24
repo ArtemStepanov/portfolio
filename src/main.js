@@ -16,11 +16,18 @@ const projects = [
     url: "https://github.com/ArtemStepanov/caddy-admin-ui",
   },
   {
-    title: "2048 Game (C#)",
+    title: "Portfolio Website",
     description:
-      "Console implementation of the 2048 game in C# with full unit test coverage.",
-    tags: ["C#", ".NET", "Testing"],
-    url: "https://github.com/ArtemStepanov/2048Game",
+      "This portfolio website is built with React and Tailwind CSS. It showcases my skills and projects.",
+    tags: ["React", "Tailwind CSS", "JavaScript"],
+    url: "https://github.com/ArtemStepanov/portfolio",
+  },
+  {
+    title: "Homelab Infrastructure",
+    description:
+      "Self-hosted cluster running 30+ services on Proxmox VE. Fully automated provisioning with Ansible and Terraform.",
+    tags: ["Proxmox", "Ansible", "Docker", "GitOps"],
+    url: null,
   },
 ];
 
@@ -35,12 +42,12 @@ function renderSkills() {
         ${items
           .map(
             (s) =>
-              `<span class="inline-flex px-3 py-1 text-sm border border-zinc-800 text-zinc-300 hover:border-zinc-600 transition-colors rounded-sm">${s}</span>`
+              `<span class="inline-flex px-3 py-1 text-sm border border-zinc-800 text-zinc-300 hover:border-zinc-600 transition-colors rounded-sm">${s}</span>`,
           )
           .join("")}
       </div>
     </div>
-  `
+  `,
     )
     .join("");
 }
@@ -58,7 +65,7 @@ function renderProjects() {
       </div>
       ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="mt-auto font-mono text-xs text-accent hover:underline">→ github</a>` : ""}
     </div>
-  `
+  `,
     )
     .join("");
 }
