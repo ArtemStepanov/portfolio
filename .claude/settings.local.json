@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(timeout 5 npm run:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
