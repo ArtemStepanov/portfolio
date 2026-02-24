@@ -10,6 +10,18 @@ import { postsArchiveTemplate } from "./posts-archive-template.js";
 const VIRTUAL_MODULE_ID = "virtual:posts-meta";
 const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID;
 
+function normalizeDate(value, filePath) {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    console.warn(
+      `[posts] Invalid date in ${path.basename(filePath)}: ${value}`,
+    );
+    return null;
+  }
+  return parsed.toISOString();
+}
+
 export default function postsPlugin() {
   let postsDir;
   let cssPath;
@@ -32,6 +44,9 @@ export default function postsPlugin() {
   }
 
   async function loadPosts(root) {
+    if (postsCache && postsCache.root === root) {
+      return postsCache.posts;
+    }
     const dir = getPostsDir(root);
     if (!fs.existsSync(dir)) return [];
 
@@ -48,19 +63,26 @@ export default function postsPlugin() {
       const { data, content } = matter(raw);
       const slug = path.basename(filePath, ".md");
       const bodyHtml = mdInstance.render(content);
+      const date = normalizeDate(data.date, filePath);
+      const sortDate = date ? new Date(date).getTime() : Number.NEGATIVE_INFINITY;
 
       posts.push({
         slug,
         title: data.title || slug,
-        date: data.date ? new Date(data.date).toISOString() : null,
+        date,
         tags: data.tags || [],
         excerpt: data.excerpt || "",
         bodyHtml,
+        sortDate,
       });
     }
 
     // Sort by date descending (newest first)
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    posts.sort((a, b) => {
+      if (a.sortDate !== b.sortDate) return b.sortDate - a.sortDate;
+      return a.slug.localeCompare(b.slug);
+    });
+    postsCache = { root, posts };
     return posts;
   }
 
@@ -86,7 +108,7 @@ export default function postsPlugin() {
           postsDir ? path.resolve(postsDir, "..") : process.cwd(),
         );
         // Export only metadata (no bodyHtml) for the listing page
-        const meta = posts.map(({ bodyHtml, ...rest }) => rest);
+        const meta = posts.map(({ bodyHtml, sortDate, ...rest }) => rest);
         return `export default ${JSON.stringify(meta)};`;
       }
     },
@@ -118,9 +140,11 @@ export default function postsPlugin() {
         if (!post) return next();
 
         const html = postTemplate({
+          slug: post.slug,
           title: post.title,
           date: post.date,
           tags: post.tags,
+          excerpt: post.excerpt,
           bodyHtml: post.bodyHtml,
           cssPath: "/src/style.css",
         });
@@ -159,18 +183,33 @@ export default function postsPlugin() {
 
       // Find the CSS asset in the bundle
       let builtCssPath = "/src/style.css";
-      for (const [fileName, chunk] of Object.entries(bundle)) {
-        if (fileName.endsWith(".css")) {
-          builtCssPath = "/" + fileName;
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type !== "chunk" || !chunk.isEntry) continue;
+        const importedCss = chunk.viteMetadata?.importedCss;
+        if (!importedCss || importedCss.size === 0) continue;
+        for (const cssFile of importedCss) {
+          builtCssPath = "/" + cssFile;
           break;
+        }
+        break;
+      }
+
+      if (builtCssPath === "/src/style.css") {
+        for (const [fileName, chunk] of Object.entries(bundle)) {
+          if (fileName.endsWith(".css")) {
+            builtCssPath = "/" + fileName;
+            break;
+          }
         }
       }
 
       for (const post of posts) {
         const html = postTemplate({
+          slug: post.slug,
           title: post.title,
           date: post.date,
           tags: post.tags,
+          excerpt: post.excerpt,
           bodyHtml: post.bodyHtml,
           cssPath: builtCssPath,
         });

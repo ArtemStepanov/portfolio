@@ -1,9 +1,21 @@
-export function postTemplate({ title, date, tags, bodyHtml, cssPath }) {
-  const formattedDate = new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+export function postTemplate({
+  slug,
+  title,
+  date,
+  tags,
+  excerpt,
+  bodyHtml,
+  cssPath,
+}) {
+  const formattedDate = date
+    ? new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Undated";
+  const canonicalUrl = slug ? `https://awocy.dev/posts/${slug}/` : null;
+  const description = excerpt || "Engineering notes and homelab write-ups.";
 
   const tagPills = tags
     .map(
@@ -18,7 +30,20 @@ export function postTemplate({ title, date, tags, bodyHtml, cssPath }) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title} — Artem Stepanov</title>
+    <meta name="description" content="${description}" />
     <meta name="author" content="Artem Stepanov" />
+    <meta name="theme-color" content="#09090b" />
+    <meta property="og:title" content="${title} — Artem Stepanov" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://awocy.dev/og-image.svg" />
+    ${canonicalUrl ? `<meta property="og:url" content="${canonicalUrl}" />` : ""}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@awocy" />
+    <meta name="twitter:image" content="https://awocy.dev/og-image.svg" />
+    ${canonicalUrl ? `<link rel="canonical" href="${canonicalUrl}" />` : ""}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="stylesheet" href="${cssPath}" />

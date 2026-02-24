@@ -19,8 +19,8 @@ const projects = [
   {
     title: "Portfolio Website",
     description:
-      "This portfolio website is built with React and Tailwind CSS. It showcases my skills and projects.",
-    tags: ["React", "Tailwind CSS", "JavaScript"],
+      "This portfolio website is built with Vite, vanilla JavaScript, and Tailwind CSS. It showcases my skills and projects.",
+    tags: ["Vite", "Vanilla JS", "Tailwind CSS"],
     url: "https://github.com/ArtemStepanov/portfolio",
   },
   {
@@ -85,15 +85,17 @@ function renderPosts() {
 
   grid.innerHTML = latest
     .map((p) => {
-      const date = new Date(p.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
+      const dateLabel = p.date
+        ? new Date(p.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })
+        : "Undated";
       return `
     <a href="/posts/${p.slug}/" class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col group">
       <div class="flex items-center gap-3 mb-2">
-        <time class="font-mono text-xs text-zinc-500">${date}</time>
+        <time class="font-mono text-xs text-zinc-500">${dateLabel}</time>
         <div class="flex flex-wrap gap-1">
           ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-600 border border-zinc-800 px-1.5 py-0.5 rounded-sm">${t}</span>`).join("")}
         </div>
