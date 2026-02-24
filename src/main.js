@@ -22,13 +22,6 @@ const projects = [
     tags: ["C#", ".NET", "Testing"],
     url: "https://github.com/ArtemStepanov/2048Game",
   },
-  {
-    title: "Homelab Infrastructure",
-    description:
-      "Self-hosted cluster running 30+ services on Proxmox VE. Fully automated provisioning with Ansible and Terraform.",
-    tags: ["Proxmox", "Ansible", "Docker", "GitOps"],
-    url: null,
-  },
 ];
 
 function renderSkills() {
