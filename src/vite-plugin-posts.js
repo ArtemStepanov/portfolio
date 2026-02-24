@@ -138,16 +138,17 @@ export default function postsPlugin() {
       });
     },
 
-    async generateBundle(options) {
+    async generateBundle(options, bundle) {
       const root = postsDir ? path.resolve(postsDir, "..") : process.cwd();
       const posts = await loadPosts(root);
 
-      // Find the CSS asset filename from the bundle
+      // Find the CSS asset in the bundle
       let builtCssPath = "/src/style.css";
-      // We'll reference the CSS via root-relative path; Cloudflare Pages handles it
-      // The CSS is in the assets directory after build
-      for (const [fileName] of Object.entries(this.getFileName ? {} : {})) {
-        // Not needed — we use a simpler approach below
+      for (const [fileName, chunk] of Object.entries(bundle)) {
+        if (fileName.endsWith(".css")) {
+          builtCssPath = "/" + fileName;
+          break;
+        }
       }
 
       for (const post of posts) {
