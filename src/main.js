@@ -1,4 +1,5 @@
 import "./style.css";
+import posts from "virtual:posts-meta";
 
 const skills = {
   Backend: ["C#", ".NET Core", "Go", "Python"],
@@ -70,5 +71,41 @@ function renderProjects() {
     .join("");
 }
 
+function renderPosts() {
+  const grid = document.getElementById("posts-grid");
+  if (!grid) return;
+
+  // Show at most 3 latest posts (already sorted newest-first by plugin)
+  const latest = posts.slice(0, 3);
+
+  if (latest.length === 0) {
+    grid.innerHTML = '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
+    return;
+  }
+
+  grid.innerHTML = latest
+    .map((p) => {
+      const date = new Date(p.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      return `
+    <a href="/posts/${p.slug}/" class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col group">
+      <div class="flex items-center gap-3 mb-2">
+        <time class="font-mono text-xs text-zinc-500">${date}</time>
+        <div class="flex flex-wrap gap-1">
+          ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-600 border border-zinc-800 px-1.5 py-0.5 rounded-sm">${t}</span>`).join("")}
+        </div>
+      </div>
+      <h3 class="font-mono font-bold text-white mb-2 group-hover:text-accent transition-colors">${p.title}</h3>
+      <p class="text-zinc-400 text-sm mb-4">${p.excerpt}</p>
+      <span class="mt-auto font-mono text-xs text-accent">read more &rarr;</span>
+    </a>`;
+    })
+    .join("");
+}
+
 renderSkills();
 renderProjects();
+renderPosts();
