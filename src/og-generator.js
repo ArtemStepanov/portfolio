@@ -1,5 +1,6 @@
 import { Resvg } from "@resvg/resvg-js";
 import { join } from "node:path";
+import { formatDate } from "./utils.js";
 
 const fontDir = join(process.cwd(), "src", "fonts");
 
@@ -62,14 +63,7 @@ export function generateOgImageBuffer(post) {
   const dividerY = 420 - shiftY + titleEndOffset;
   const tagsY = 470 - shiftY + titleEndOffset;
   const subtitle = post
-    ? post.date
-      ? new Date(post.date).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          timeZone: "UTC",
-        })
-      : "Undated"
+    ? formatDate(post.date, { month: "long" })
     : "Senior Software Engineer";
   const tagsStr =
     post && post.tags && post.tags.length > 0

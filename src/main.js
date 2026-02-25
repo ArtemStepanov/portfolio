@@ -1,5 +1,6 @@
 import "./style.css";
 import posts from "virtual:posts-meta";
+import { formatDate } from "./utils.js";
 
 const skills = {
   Backend: ["C#", ".NET Core", "Go", "Python"],
@@ -96,14 +97,7 @@ function renderPosts() {
 
   grid.innerHTML = latest
     .map((p) => {
-      const dateLabel = p.date
-        ? new Date(p.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            timeZone: "UTC",
-          })
-        : "Undated";
+      const dateLabel = formatDate(p.date, { month: "short" });
       return `
     <a href="/posts/${escapeHtml(p.slug)}/" class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col group">
       <div class="flex items-center gap-3 mb-2">

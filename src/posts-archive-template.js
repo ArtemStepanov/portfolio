@@ -1,11 +1,9 @@
+import { formatDate } from "./utils.js";
+
 export function postsArchiveTemplate({ posts, cssPath }) {
   const postCards = posts
     .map((p) => {
-      const date = new Date(p.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
+      const date = formatDate(p.date, { month: "short" });
       const tagPills = p.tags
         .map(
           (t) =>

@@ -1,3 +1,5 @@
+import { formatDate } from "./utils.js";
+
 export function postTemplate({
   slug,
   title,
@@ -7,13 +9,7 @@ export function postTemplate({
   bodyHtml,
   cssPath,
 }) {
-  const formattedDate = date
-    ? new Date(date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "Undated";
+  const formattedDate = formatDate(date, { month: "long" });
   const canonicalUrl = slug ? `https://awocy.dev/posts/${slug}/` : null;
   const description = excerpt || "Engineering notes and homelab write-ups.";
 
