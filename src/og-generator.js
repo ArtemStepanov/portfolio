@@ -81,8 +81,8 @@ export function generateOgImageBuffer(post) {
   <rect x="0" y="0" width="1200" height="6" fill="#22c55e" />
   <rect x="0" y="624" width="1200" height="6" fill="#22c55e" />
   <text x="96" y="${startY}" fill="#e4e4e7" font-size="64" font-family="Inter" font-weight="bold">${titleSvg}</text>
-  <text x="96" y="${subtitleY}" fill="#a1a1aa" font-size="28" font-family="JetBrains Mono">${subtitle}</text>
-  <text x="96" y="${siteUrlY}" fill="#22c55e" font-size="24" font-family="JetBrains Mono">~/awocy.dev${post ? `/posts/${post.slug}` : ""}</text>
+  <text x="96" y="${subtitleY}" fill="#a1a1aa" font-size="28" font-family="JetBrains Mono">${escapeXml(subtitle)}</text>
+  <text x="96" y="${siteUrlY}" fill="#22c55e" font-size="24" font-family="JetBrains Mono">~/awocy.dev${post ? `/posts/${escapeXml(post.slug)}` : ""}</text>
   <path d="M96 ${dividerY}h180" stroke="#3f3f46" stroke-width="2" />
   <text x="96" y="${tagsY}" fill="#71717a" font-size="20" font-family="JetBrains Mono">${tagsStr}</text>
 </svg>`;
