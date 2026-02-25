@@ -6,6 +6,7 @@ import MarkdownIt from "markdown-it";
 import Shiki from "@shikijs/markdown-it";
 import { postTemplate } from "./post-template.js";
 import { postsArchiveTemplate } from "./posts-archive-template.js";
+import { generateOgImageBuffer } from "./og-generator.js";
 
 const VIRTUAL_MODULE_ID = "virtual:posts-meta";
 const RESOLVED_VIRTUAL_MODULE_ID = "\0" + VIRTUAL_MODULE_ID;
@@ -64,7 +65,9 @@ export default function postsPlugin() {
       const slug = path.basename(filePath, ".md");
       const bodyHtml = mdInstance.render(content);
       const date = normalizeDate(data.date, filePath);
-      const sortDate = date ? new Date(date).getTime() : Number.NEGATIVE_INFINITY;
+      const sortDate = date
+        ? new Date(date).getTime()
+        : Number.NEGATIVE_INFINITY;
 
       posts.push({
         slug,
@@ -115,8 +118,9 @@ export default function postsPlugin() {
 
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
+        const url = new URL(req.url || "/", "http://localhost");
         // Archive listing: /posts/ or /posts
-        if (req.url === "/posts/" || req.url === "/posts") {
+        if (url.pathname === "/posts/" || url.pathname === "/posts") {
           const posts = await loadPosts(server.config.root);
           const meta = posts.map(({ bodyHtml, ...rest }) => rest);
           const html = postsArchiveTemplate({
@@ -129,8 +133,24 @@ export default function postsPlugin() {
           return;
         }
 
+        // Handle dynamic og-image.png for each post
+        const ogMatch = url.pathname.match(
+          /^\/posts\/([a-z0-9-]+)\/og-image\.png$/,
+        );
+        if (ogMatch) {
+          const slug = ogMatch[1];
+          const posts = await loadPosts(server.config.root);
+          const post = posts.find((p) => p.slug === slug);
+          if (post) {
+            const pngBuffer = generateOgImageBuffer(post);
+            res.setHeader("Content-Type", "image/png");
+            res.end(pngBuffer);
+            return;
+          }
+        }
+
         // Individual post: /posts/<slug>/
-        const match = req.url?.match(/^\/posts\/([a-z0-9-]+)\/?$/);
+        const match = url.pathname.match(/^\/posts\/([a-z0-9-]+)\/?$/);
         if (!match) return next();
 
         const slug = match[1];
@@ -218,6 +238,13 @@ export default function postsPlugin() {
           type: "asset",
           fileName: `posts/${post.slug}/index.html`,
           source: html,
+        });
+
+        const pngBuffer = generateOgImageBuffer(post);
+        this.emitFile({
+          type: "asset",
+          fileName: `posts/${post.slug}/og-image.png`,
+          source: pngBuffer,
         });
       }
 

@@ -2,8 +2,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
-    Menlo, Consolas, "Liberation Mono", monospace;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --color-accent: var(--color-green-400);
 }
@@ -13,8 +14,13 @@ html {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .cursor-blink {
@@ -73,7 +79,8 @@ html {
   font-weight: 700;
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   margin-bottom: 1.25rem;
   padding-left: 1.5rem;
 }

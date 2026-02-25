@@ -36,11 +36,11 @@ export function postTemplate({
     <meta property="og:title" content="${title} — Artem Stepanov" />
     <meta property="og:description" content="${description}" />
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="https://awocy.dev/og-image.svg" />
+    <meta property="og:image" content="https://awocy.dev/posts/${slug}/og-image.png" />
     ${canonicalUrl ? `<meta property="og:url" content="${canonicalUrl}" />` : ""}
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@awocy" />
-    <meta name="twitter:image" content="https://awocy.dev/og-image.svg" />
+    <meta name="twitter:image" content="https://awocy.dev/posts/${slug}/og-image.png" />
     ${canonicalUrl ? `<link rel="canonical" href="${canonicalUrl}" />` : ""}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

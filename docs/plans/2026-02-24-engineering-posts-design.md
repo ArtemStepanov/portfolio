@@ -8,14 +8,14 @@ Hosted on Cloudflare Workers/Pages — static HTML output works natively.
 
 ## Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Authoring | Markdown files in repo | Git-native workflow, public repo is fine |
-| Navigation | Separate page per post | Own URL, SEO-friendly, clean reading experience |
-| Integration | New #posts section on main page | Latest 3 posts as cards, consistent with #projects |
-| Build strategy | Custom Vite plugin | Single pipeline, HMR support, full control, no framework deps |
-| Markdown features | Standard (extensible later) | Headings, lists, code, links, images, bold/italic |
-| Syntax highlighting | Shiki (build-time) | Zero client JS, dark theme matching site aesthetic |
+| Decision            | Choice                          | Rationale                                                     |
+| ------------------- | ------------------------------- | ------------------------------------------------------------- |
+| Authoring           | Markdown files in repo          | Git-native workflow, public repo is fine                      |
+| Navigation          | Separate page per post          | Own URL, SEO-friendly, clean reading experience               |
+| Integration         | New #posts section on main page | Latest 3 posts as cards, consistent with #projects            |
+| Build strategy      | Custom Vite plugin              | Single pipeline, HMR support, full control, no framework deps |
+| Markdown features   | Standard (extensible later)     | Headings, lists, code, links, images, bold/italic             |
+| Syntax highlighting | Shiki (build-time)              | Zero client JS, dark theme matching site aesthetic            |
 
 ## File Structure
 

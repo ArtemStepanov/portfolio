@@ -12,18 +12,18 @@ Personal developer portfolio. Single page, smooth scroll, dark-mode-first with a
 
 ## Design Tokens
 
-| Token | Value |
-|-------|-------|
-| Background | zinc-950 |
-| Surface/cards | zinc-900, border zinc-800 |
-| Primary text | zinc-100 |
-| Secondary text | zinc-400 |
-| Accent | green-400 (terminal green) |
+| Token                   | Value                                                        |
+| ----------------------- | ------------------------------------------------------------ |
+| Background              | zinc-950                                                     |
+| Surface/cards           | zinc-900, border zinc-800                                    |
+| Primary text            | zinc-100                                                     |
+| Secondary text          | zinc-400                                                     |
+| Accent                  | green-400 (terminal green)                                   |
 | Font — headings/accents | Monospace: JetBrains Mono / Fira Code, fallback ui-monospace |
-| Font — body | System sans-serif (Inter or system default) |
-| Borders | Sharp corners (no border-radius), 1px solid zinc-700/800 |
-| Spacing | Generous whitespace, large section padding |
-| Dark mode | Default via prefers-color-scheme, no light toggle |
+| Font — body             | System sans-serif (Inter or system default)                  |
+| Borders                 | Sharp corners (no border-radius), 1px solid zinc-700/800     |
+| Spacing                 | Generous whitespace, large section padding                   |
+| Dark mode               | Default via prefers-color-scheme, no light toggle            |
 
 ## Page Structure
 

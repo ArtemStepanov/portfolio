@@ -13,11 +13,13 @@
 ### Task 1: Install dependencies
 
 **Files:**
+
 - Modify: `package.json`
 
 **Step 1: Install markdown-it, gray-matter, shiki, and the shiki markdown-it plugin**
 
 Run:
+
 ```bash
 npm install markdown-it gray-matter shiki @shikijs/markdown-it
 ```
@@ -25,9 +27,11 @@ npm install markdown-it gray-matter shiki @shikijs/markdown-it
 **Step 2: Verify installation**
 
 Run:
+
 ```bash
 node -e "import('markdown-it').then(m => console.log('markdown-it OK')); import('gray-matter').then(m => console.log('gray-matter OK')); import('shiki').then(m => console.log('shiki OK'));"
 ```
+
 Expected: All three print OK.
 
 **Step 3: Commit**
@@ -42,6 +46,7 @@ git commit -m "feat: add markdown-it, gray-matter, shiki dependencies for posts"
 ### Task 2: Create the post HTML template function
 
 **Files:**
+
 - Create: `src/post-template.js`
 
 **Step 1: Create the template module**
@@ -127,11 +132,13 @@ git commit -m "feat: add post HTML template function"
 ### Task 3: Create the Vite plugin
 
 **Files:**
+
 - Create: `src/vite-plugin-posts.js`
 
 **Step 1: Create the plugin**
 
 Create `src/vite-plugin-posts.js`. This is the core of the feature — it:
+
 - Reads and parses all `posts/*.md` files
 - Converts markdown to HTML with syntax highlighting
 - Serves post pages during dev via middleware
@@ -323,6 +330,7 @@ git commit -m "feat: add custom Vite plugin for markdown posts"
 ### Task 4: Wire up the plugin and fix build CSS injection
 
 **Files:**
+
 - Modify: `vite.config.js`
 
 **Step 1: Register the posts plugin in vite config**
@@ -351,13 +359,14 @@ git commit -m "feat: register posts plugin in Vite config"
 ### Task 5: Create a sample post
 
 **Files:**
+
 - Create: `posts/hello-world.md`
 
 **Step 1: Create posts directory and a sample post**
 
 Create `posts/hello-world.md` with frontmatter and markdown content that exercises key features (headings, code blocks, lists, links, inline code):
 
-```markdown
+`````markdown
 ---
 title: "Hello World: First Post"
 date: 2026-02-24
@@ -379,7 +388,7 @@ I wanted a place to share notes on my homelab, engineering tips, and things I le
 
 Here's a simple Go HTTP server:
 
-```go
+````go
 package main
 
 import (
@@ -396,18 +405,23 @@ func main() {
 \```
 
 That's it for now. More posts coming soon.
-```
+````
+`````
+
+````
 
 > **Note:** The closing triple backtick above should NOT have a backslash — that's just escaping for this plan doc. Write it as a normal closing code fence.
 
 **Step 2: Verify dev server serves the post**
 
 Run:
+
 ```bash
 npm run dev
 ```
 
 Visit `http://localhost:5173/posts/hello-world` in a browser. Verify:
+
 - Page loads with nav, title, date, tags, body content
 - Code block has syntax highlighting
 - Tailwind styles are applied (dark background, correct fonts)
@@ -424,6 +438,7 @@ git commit -m "feat: add sample hello-world post"
 ### Task 6: Add prose styling for post content
 
 **Files:**
+
 - Modify: `src/style.css`
 
 **Step 1: Add scoped prose styles**
@@ -483,7 +498,8 @@ Append to `src/style.css` — these style the rendered markdown inside `.prose` 
   font-weight: 700;
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   margin-bottom: 1.25rem;
   padding-left: 1.5rem;
 }
@@ -547,6 +563,7 @@ Append to `src/style.css` — these style the rendered markdown inside `.prose` 
 **Step 2: Verify styling on the sample post**
 
 Run dev server, visit the hello-world post, verify:
+
 - Headings use JetBrains Mono
 - Code blocks have border and syntax colors
 - Lists have bullets
@@ -564,6 +581,7 @@ git commit -m "feat: add prose styling for post content"
 ### Task 7: Add #posts section to the main page
 
 **Files:**
+
 - Modify: `index.html`
 
 **Step 1: Add "posts" nav link**
@@ -583,15 +601,12 @@ Add a new section between `<!-- Projects -->` (closing `</section>`) and `<!-- S
 ```html
 <!-- Posts -->
 <section id="posts" class="py-24">
-    <div class="max-w-5xl mx-auto px-6">
-        <h2 class="font-mono text-accent text-sm mb-8">// posts</h2>
-        <div
-            id="posts-grid"
-            class="grid gap-6 grid-cols-1 sm:grid-cols-2"
-        >
-            <!-- Rendered by main.js -->
-        </div>
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="font-mono text-accent text-sm mb-8">// posts</h2>
+    <div id="posts-grid" class="grid gap-6 grid-cols-1 sm:grid-cols-2">
+      <!-- Rendered by main.js -->
     </div>
+  </div>
 </section>
 ```
 
@@ -607,6 +622,7 @@ git commit -m "feat: add #posts section and nav link to main page"
 ### Task 8: Add renderPosts() to main.js
 
 **Files:**
+
 - Modify: `src/main.js`
 
 **Step 1: Import post metadata and add render function**
@@ -628,7 +644,8 @@ function renderPosts() {
   const latest = posts.slice(0, 3);
 
   if (latest.length === 0) {
-    grid.innerHTML = '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
+    grid.innerHTML =
+      '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
     return;
   }
 
@@ -667,6 +684,7 @@ renderPosts();
 **Step 2: Verify on dev server**
 
 Run dev server, visit the main page. Verify:
+
 - #posts section appears between projects and skills
 - The hello-world post card shows with title, date, tags, excerpt
 - Clicking the card navigates to `/posts/hello-world/`
@@ -683,6 +701,7 @@ git commit -m "feat: add renderPosts() with virtual module import"
 ### Task 9: Fix build output — CSS injection for post pages
 
 **Files:**
+
 - Modify: `src/vite-plugin-posts.js`
 
 **Step 1: Update generateBundle to reference the built CSS asset**
@@ -726,11 +745,13 @@ async generateBundle(options, bundle) {
 **Step 2: Verify production build**
 
 Run:
+
 ```bash
 npm run build
 ```
 
 Verify:
+
 - `dist/posts/hello-world/index.html` exists
 - The HTML references the correct CSS file (e.g., `/assets/style-abc123.css`)
 - The post content is rendered with syntax-highlighted code blocks
@@ -738,6 +759,7 @@ Verify:
 **Step 3: Preview production build**
 
 Run:
+
 ```bash
 npm run preview
 ```
@@ -762,6 +784,7 @@ npm run build && npm run preview
 ```
 
 Verify all of the following:
+
 - Main page loads at `/` with all sections including #posts
 - Posts grid shows the hello-world card
 - Clicking the card navigates to `/posts/hello-world/`
@@ -787,13 +810,14 @@ git commit -m "feat: complete engineering posts feature"
 
 ## Summary of files changed
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `package.json` | Modify | Add markdown-it, gray-matter, shiki deps |
-| `src/vite-plugin-posts.js` | Create | Custom Vite plugin — core of the feature |
-| `src/post-template.js` | Create | HTML template for post pages |
-| `vite.config.js` | Modify | Register posts plugin |
-| `posts/hello-world.md` | Create | Sample post for testing |
-| `src/style.css` | Modify | Add prose styling for post content |
-| `index.html` | Modify | Add #posts section + nav link |
-| `src/main.js` | Modify | Add renderPosts() + virtual module import |
+| File                       | Action | Purpose                                   |
+| -------------------------- | ------ | ----------------------------------------- |
+| `package.json`             | Modify | Add markdown-it, gray-matter, shiki deps  |
+| `src/vite-plugin-posts.js` | Create | Custom Vite plugin — core of the feature  |
+| `src/post-template.js`     | Create | HTML template for post pages              |
+| `vite.config.js`           | Modify | Register posts plugin                     |
+| `posts/hello-world.md`     | Create | Sample post for testing                   |
+| `src/style.css`            | Modify | Add prose styling for post content        |
+| `index.html`               | Modify | Add #posts section + nav link             |
+| `src/main.js`              | Modify | Add renderPosts() + virtual module import |
+````

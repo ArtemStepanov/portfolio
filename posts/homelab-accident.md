@@ -9,7 +9,7 @@ If a change can't be reproduced from scratch — it was an accident, not a decis
 
 I didn't read that in a DevOps handbook. I learned it the hard way.
 
-A routine update bricked the baremetal Ubuntu Server running on my Mi Notebook Pro. I had backups. I didn't have *tested restores*. And I didn't have Infrastructure as Code.
+A routine update bricked the baremetal Ubuntu Server running on my Mi Notebook Pro. I had backups. I didn't have _tested restores_. And I didn't have Infrastructure as Code.
 
 Five days of nightmare followed.
 

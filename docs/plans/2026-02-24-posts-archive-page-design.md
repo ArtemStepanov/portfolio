@@ -13,6 +13,7 @@ Add a dedicated `/posts/` archive page that lists all posts. The main page keeps
 Extend the existing Vite plugin (`vite-plugin-posts.js`) to generate `/posts/index.html` — same pattern it already uses for individual post pages.
 
 Touch points:
+
 1. **New template** (`src/posts-archive-template.js`) — HTML for the archive page
 2. **Vite plugin** — serve `/posts/` in dev, emit `posts/index.html` at build
 3. **Main page** (`src/main.js`) — add "view all posts" link when posts > 3
@@ -30,15 +31,17 @@ Touch points:
 ## Main Page Changes
 
 Below the 3-post grid, add:
+
 ```
 view all posts →
 ```
+
 Styled: `font-mono text-sm text-accent hover:underline`, left-aligned. Only shown when total posts > 3.
 
 ## Files
 
-| File | Action |
-|------|--------|
-| `src/posts-archive-template.js` | Create — archive page HTML template |
-| `src/vite-plugin-posts.js` | Modify — add archive page to dev middleware + build |
-| `src/main.js` | Modify — add "view all posts" link |
+| File                            | Action                                              |
+| ------------------------------- | --------------------------------------------------- |
+| `src/posts-archive-template.js` | Create — archive page HTML template                 |
+| `src/vite-plugin-posts.js`      | Modify — add archive page to dev middleware + build |
+| `src/main.js`                   | Modify — add "view all posts" link                  |

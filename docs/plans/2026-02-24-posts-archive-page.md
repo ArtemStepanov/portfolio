@@ -13,6 +13,7 @@
 ### Task 1: Create archive page template
 
 **Files:**
+
 - Create: `src/posts-archive-template.js`
 
 **Reference:** `src/post-template.js` — reuse the same nav/footer HTML structure.
@@ -107,6 +108,7 @@ git commit -m "feat: add posts archive page template"
 ### Task 2: Add archive page to Vite plugin (dev middleware)
 
 **Files:**
+
 - Modify: `src/vite-plugin-posts.js:7` (add import)
 - Modify: `src/vite-plugin-posts.js:93-119` (add route to `configureServer`)
 
@@ -125,46 +127,43 @@ In the `configureServer` method, the existing middleware at line 94 matches `/po
 Inside `configureServer(server)`, replace the `server.middlewares.use(...)` block (lines 94-119) with:
 
 ```js
-      server.middlewares.use(async (req, res, next) => {
-        // Archive listing: /posts/ or /posts
-        if (req.url === "/posts/" || req.url === "/posts") {
-          const posts = await loadPosts(server.config.root);
-          const meta = posts.map(({ bodyHtml, ...rest }) => rest);
-          const html = postsArchiveTemplate({
-            posts: meta,
-            cssPath: "/src/style.css",
-          });
-          const transformed = await server.transformIndexHtml("/posts/", html);
-          res.setHeader("Content-Type", "text/html");
-          res.end(transformed);
-          return;
-        }
+server.middlewares.use(async (req, res, next) => {
+  // Archive listing: /posts/ or /posts
+  if (req.url === "/posts/" || req.url === "/posts") {
+    const posts = await loadPosts(server.config.root);
+    const meta = posts.map(({ bodyHtml, ...rest }) => rest);
+    const html = postsArchiveTemplate({
+      posts: meta,
+      cssPath: "/src/style.css",
+    });
+    const transformed = await server.transformIndexHtml("/posts/", html);
+    res.setHeader("Content-Type", "text/html");
+    res.end(transformed);
+    return;
+  }
 
-        // Individual post: /posts/<slug>/
-        const match = req.url?.match(/^\/posts\/([a-z0-9-]+)\/?$/);
-        if (!match) return next();
+  // Individual post: /posts/<slug>/
+  const match = req.url?.match(/^\/posts\/([a-z0-9-]+)\/?$/);
+  if (!match) return next();
 
-        const slug = match[1];
-        const posts = await loadPosts(server.config.root);
-        const post = posts.find((p) => p.slug === slug);
+  const slug = match[1];
+  const posts = await loadPosts(server.config.root);
+  const post = posts.find((p) => p.slug === slug);
 
-        if (!post) return next();
+  if (!post) return next();
 
-        const html = postTemplate({
-          title: post.title,
-          date: post.date,
-          tags: post.tags,
-          bodyHtml: post.bodyHtml,
-          cssPath: "/src/style.css",
-        });
+  const html = postTemplate({
+    title: post.title,
+    date: post.date,
+    tags: post.tags,
+    bodyHtml: post.bodyHtml,
+    cssPath: "/src/style.css",
+  });
 
-        const transformed = await server.transformIndexHtml(
-          `/posts/${slug}/`,
-          html,
-        );
-        res.setHeader("Content-Type", "text/html");
-        res.end(transformed);
-      });
+  const transformed = await server.transformIndexHtml(`/posts/${slug}/`, html);
+  res.setHeader("Content-Type", "text/html");
+  res.end(transformed);
+});
 ```
 
 **Step 3: Verify in dev**
@@ -187,6 +186,7 @@ git commit -m "feat: serve /posts/ archive page in dev"
 ### Task 3: Add archive page to Vite plugin (build emit)
 
 **Files:**
+
 - Modify: `src/vite-plugin-posts.js:141-169` (`generateBundle` hook)
 
 **Step 1: Emit `posts/index.html` in `generateBundle`**
@@ -194,17 +194,17 @@ git commit -m "feat: serve /posts/ archive page in dev"
 After the existing `for (const post of posts)` loop (which emits individual post pages), add the archive page emit. Add after line 168 (after the `for` loop's closing brace), before the `generateBundle`'s closing brace:
 
 ```js
-      // Emit archive listing page
-      const archiveMeta = posts.map(({ bodyHtml, ...rest }) => rest);
-      const archiveHtml = postsArchiveTemplate({
-        posts: archiveMeta,
-        cssPath: builtCssPath,
-      });
-      this.emitFile({
-        type: "asset",
-        fileName: "posts/index.html",
-        source: archiveHtml,
-      });
+// Emit archive listing page
+const archiveMeta = posts.map(({ bodyHtml, ...rest }) => rest);
+const archiveHtml = postsArchiveTemplate({
+  posts: archiveMeta,
+  cssPath: builtCssPath,
+});
+this.emitFile({
+  type: "asset",
+  fileName: "posts/index.html",
+  source: archiveHtml,
+});
 ```
 
 **Step 2: Verify build**
@@ -235,6 +235,7 @@ git commit -m "feat: emit /posts/index.html at build time"
 ### Task 4: Add "view all posts" link on main page
 
 **Files:**
+
 - Modify: `src/main.js:74-107` (`renderPosts` function)
 
 **Step 1: Add "view all" link after the grid**
@@ -249,7 +250,8 @@ function renderPosts() {
   const latest = posts.slice(0, 3);
 
   if (latest.length === 0) {
-    grid.innerHTML = '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
+    grid.innerHTML =
+      '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
     return;
   }
 

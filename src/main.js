@@ -8,6 +8,16 @@ const skills = {
   "Data & Observability": ["PostgreSQL", "Redis", "Prometheus"],
 };
 
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 const projects = [
   {
     title: "caddy-admin-ui",
@@ -38,12 +48,12 @@ function renderSkills() {
     .map(
       ([category, items]) => `
     <div>
-      <p class="font-mono text-accent text-xs mb-2">${category}</p>
+      <p class="font-mono text-accent text-xs mb-2">${escapeHtml(category)}</p>
       <div class="flex flex-wrap gap-2">
         ${items
           .map(
             (s) =>
-              `<span class="inline-flex px-3 py-1 text-sm border border-zinc-800 text-zinc-300 hover:border-zinc-600 transition-colors rounded-sm">${s}</span>`,
+              `<span class="inline-flex px-3 py-1 text-sm border border-zinc-800 text-zinc-300 hover:border-zinc-600 transition-colors rounded-sm">${escapeHtml(s)}</span>`,
           )
           .join("")}
       </div>
@@ -59,12 +69,12 @@ function renderProjects() {
     .map(
       (p) => `
     <div class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col">
-      <h3 class="font-mono font-bold text-white mb-2">${p.title}</h3>
-      <p class="text-zinc-400 text-sm mb-4">${p.description}</p>
+      <h3 class="font-mono font-bold text-white mb-2">${escapeHtml(p.title)}</h3>
+      <p class="text-zinc-400 text-sm mb-4">${escapeHtml(p.description)}</p>
       <div class="flex flex-wrap gap-2 mb-4">
-        ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-500 border border-zinc-800 px-2 py-1 rounded-sm">${t}</span>`).join("")}
+        ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-500 border border-zinc-800 px-2 py-1 rounded-sm">${escapeHtml(t)}</span>`).join("")}
       </div>
-      ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener" class="mt-auto font-mono text-xs text-accent hover:underline">→ github</a>` : ""}
+      ${p.url ? `<a href="${escapeHtml(p.url)}" target="_blank" rel="noopener" class="mt-auto font-mono text-xs text-accent hover:underline">→ github</a>` : ""}
     </div>
   `,
     )
@@ -79,7 +89,8 @@ function renderPosts() {
   const latest = posts.slice(0, 3);
 
   if (latest.length === 0) {
-    grid.innerHTML = '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
+    grid.innerHTML =
+      '<p class="text-zinc-500 font-mono text-sm">No posts yet.</p>';
     return;
   }
 
@@ -90,18 +101,19 @@ function renderPosts() {
             year: "numeric",
             month: "short",
             day: "numeric",
+            timeZone: "UTC",
           })
         : "Undated";
       return `
-    <a href="/posts/${p.slug}/" class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col group">
+    <a href="/posts/${escapeHtml(p.slug)}/" class="bg-zinc-900 border border-zinc-800 hover:border-zinc-600 p-5 rounded-sm transition-colors flex flex-col group">
       <div class="flex items-center gap-3 mb-2">
-        <time class="font-mono text-xs text-zinc-500">${dateLabel}</time>
+        <time class="font-mono text-xs text-zinc-500">${escapeHtml(dateLabel)}</time>
         <div class="flex flex-wrap gap-1">
-          ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-600 border border-zinc-800 px-1.5 py-0.5 rounded-sm">${t}</span>`).join("")}
+          ${p.tags.map((t) => `<span class="text-xs font-mono text-zinc-600 border border-zinc-800 px-1.5 py-0.5 rounded-sm">${escapeHtml(t)}</span>`).join("")}
         </div>
       </div>
-      <h3 class="font-mono font-bold text-white mb-2 group-hover:text-accent transition-colors">${p.title}</h3>
-      <p class="text-zinc-400 text-sm mb-4">${p.excerpt}</p>
+      <h3 class="font-mono font-bold text-white mb-2 group-hover:text-accent transition-colors">${escapeHtml(p.title)}</h3>
+      <p class="text-zinc-400 text-sm mb-4">${escapeHtml(p.excerpt)}</p>
       <span class="mt-auto font-mono text-xs text-accent">read more &rarr;</span>
     </a>`;
     })
