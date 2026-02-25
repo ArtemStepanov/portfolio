@@ -52,7 +52,7 @@ export function postTemplate({
     <!-- Nav -->
     <nav class="fixed top-0 w-full bg-zinc-950/80 backdrop-blur border-b border-zinc-800 z-50">
       <div class="max-w-5xl mx-auto px-6 py-4 flex justify-center sm:justify-between items-center">
-        <a href="/" class="font-mono font-bold text-accent hidden sm:block">~/awocy</a>
+        <a href="/" class="nav-logo font-mono font-bold text-accent hidden sm:block">awocy</a>
         <div class="flex gap-4 sm:gap-6 font-mono text-sm text-zinc-400">
           <a href="/#experience" class="hover:text-accent transition-colors">experience</a>
           <a href="/#projects" class="hover:text-accent transition-colors">projects</a>

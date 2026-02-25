@@ -132,3 +132,17 @@ html {
   border-top: 1px solid var(--color-zinc-800);
   margin: 2rem 0;
 }
+
+/* Decorative non-selectable prefixes */
+.section-heading,
+.nav-logo {
+  user-select: none;
+}
+
+.section-heading::before {
+  content: "// ";
+}
+
+.nav-logo::before {
+  content: "~/";
+}
